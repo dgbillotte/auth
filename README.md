@@ -19,12 +19,9 @@ The default configuration for authentication uses these fields:
 - password
 - email
 
-Additionally, the default table name is "users".
-
-I don't like all these defaults and am going to call my table "user" and use these fields:
+Additionally, the default table name is "users". I could have used all the defaults and there would be *zero* changes to make, but I think it is good to know where to make the changes if you need, so I am going to call my table "user" and use these fields:
 - first_name
 - last_name
-- username
 - password
 - email
 
@@ -33,13 +30,48 @@ The (my)sql for the table is:
 ```sql
 create table user (
     id int auto_increment primary key,
-    username varchar(255),
-    password varchar(255),
     first_name varchar(255),
     last_name varchar(255),
     email varchar(255),
+    password varchar(255),    
     remember_token varchar(255),
     created_at datetime,
     updated_at datetime
 );
 ```
+## Initial Auth Configuration
+There are three files that must be updated to accomidate my changes to the default:
+
+in config/auth.php change:
+```php
+	'table' => 'users',
+// to
+	'table' => 'user',
+```
+
+in app/User.php change:
+```php
+  protected $table = 'users';
+  // to
+  protected $table = 'user';
+  
+  // and
+  protected $fillable = ['name', 'email', 'password'];
+  // to
+   protected $fillable = ['first_name', 'last_name', 'email', 'password'];
+```
+
+in app/Services/Registrar.php change:
+```php
+			'email' => 'required|email|max:255|unique:users',
+			// to
+			'email' => 'required|email|max:255|unique:user',
+```
+
+## Test the Default Controllers and Views
+By default the following routes are built in and provide full registration and login functionality:
+- /auth/login
+- /auth/register
+
+
+
