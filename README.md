@@ -73,5 +73,10 @@ By default the following routes are built in and provide full registration and l
 - /auth/login
 - /auth/register
 
+## Default Views and Controller
+There are several views and two controllers that are available for use, modification, or as models for creating your own. The views live under resources/views/auth and the controllers live under app/Http/Controllers/Auth. The AuthController utilizes a "trait" called AuthenticatesAndRegistersUsers.php which lives at vendor/laravel/framework/src/Illuminate/Foundation/Auth/AuthenticatesAndRegistersUsers.php (from here on knows as AARU.php). You'll need to crack this guy open if you want to really use or understand the AuthController.
+
+NOTE: while it might be reasonable to change and use the views and the AuthController, you *really* shouldn't change AARU.php. If you want to override what it does, do so by overriding its methods or properties in AuthController or in your own subclass of AuthController.
+
 
 
